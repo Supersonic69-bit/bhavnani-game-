@@ -1,225 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Bhavnani Games</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <!-- THREE.JS -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
-        }
-    }
-    </script>
 </head>
 
 <body>
 
-    <main id="game">
+    <!-- INTRO -->
+    <section id="introScreen" class="screen">
+        <div class="introText">
+            BHAVNANI GAMES PRESENTS
+        </div>
+    </section>
 
-        <!-- ========================= -->
-        <!-- INTRO SCREEN -->
-        <!-- ========================= -->
 
-        <section id="intro-screen" class="screen">
+    <!-- TITLE -->
+    <section id="titleScreen" class="screen hidden">
 
-            <div class="intro-content">
+        <h1>BHAVNANI GAMES</h1>
 
-                <div id="studio-logo">
-                    BHAVNANI GAMES
-                </div>
+        <button id="startButton">
+            START
+        </button>
 
-                <p id="intro-text">
-                    PRESENTS
-                </p>
+    </section>
 
-            </div>
 
-        </section>
+    <!-- MAIN MENU -->
+    <section id="mainMenu" class="screen hidden">
 
+        <h1>BHAVNANI CITY</h1>
 
-        <!-- ========================= -->
-        <!-- TITLE SCREEN -->
-        <!-- ========================= -->
+        <button id="newGameButton">
+            NEW GAME
+        </button>
 
-        <section id="title-screen" class="screen hidden">
+        <button id="continueButton">
+            CONTINUE
+        </button>
 
-            <div class="title-content">
+        <button id="settingsButton">
+            SETTINGS
+        </button>
 
-                <h1 id="game-title">
-                    BHAVNANI GAMES
-                </h1>
+    </section>
 
-                <p id="game-subtitle">
-                    A NEW ADVENTURE BEGINS
-                </p>
 
-                <button id="start-button">
-                    START GAME
-                </button>
+    <!-- STORY -->
+    <section id="storyScreen" class="screen hidden">
 
-            </div>
+        <h1>BHAVNANI CITY</h1>
 
-        </section>
+        <p>
+            Welcome to Bhavnani City.
+        </p>
 
+        <p>
+            Your story begins here.
+        </p>
 
-        <!-- ========================= -->
-        <!-- MAIN MENU -->
-        <!-- ========================= -->
+        <button id="storyContinue">
+            CONTINUE
+        </button>
 
-        <section id="main-menu" class="screen hidden">
+    </section>
 
-            <div class="menu-content">
 
-                <h2>
-                    MAIN MENU
-                </h2>
+    <!-- GAME -->
+    <section id="gameWorld" class="screen hidden">
+    </section>
 
-                <button id="new-game-button">
-                    NEW GAME
-                </button>
 
-                <button id="continue-button">
-                    CONTINUE
-                </button>
+    <!-- SETTINGS -->
+    <section id="settingsScreen" class="screen hidden">
 
-                <button id="settings-button">
-                    SETTINGS
-                </button>
+        <h1>SETTINGS</h1>
 
-            </div>
+        <button id="backButton">
+            BACK
+        </button>
 
-        </section>
+    </section>
 
 
-        <!-- ========================= -->
-        <!-- STORY SCREEN -->
-        <!-- ========================= -->
-
-        <section id="story-screen" class="screen hidden">
-
-            <div class="story-content">
-
-                <h2 id="story-title">
-                    THE BEGINNING
-                </h2>
-
-                <p id="story-text">
-                    The story begins here...
-                </p>
-
-                <button id="story-continue-button">
-                    CONTINUE
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- ========================= -->
-        <!-- 3D GAME WORLD -->
-        <!-- ========================= -->
-
-        <section id="game-world" class="hidden">
-
-            <canvas id="gameCanvas"></canvas>
-
-
-            <!-- ========================= -->
-            <!-- GAME HUD -->
-            <!-- ========================= -->
-
-            <div id="hud">
-
-                <div id="health">
-                    ❤️ Health: 100
-                </div>
-
-                <div id="objective">
-                    Objective: Explore the area
-                </div>
-
-                <div id="game-time">
-                    00:00
-                </div>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- CONTROLS -->
-            <!-- ========================= -->
-
-            <div id="controls">
-
-                <div class="control-row">
-                    <span>W</span>
-                </div>
-
-                <div class="control-row">
-
-                    <span>A</span>
-                    <span>S</span>
-                    <span>D</span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ========================= -->
-        <!-- SETTINGS SCREEN -->
-        <!-- ========================= -->
-
-        <section id="settings-screen" class="screen hidden">
-
-            <div class="settings-content">
-
-                <h2>
-                    SETTINGS
-                </h2>
-
-
-                <button id="audio-settings">
-                    AUDIO
-                </button>
-
-
-                <button id="graphics-settings">
-                    GRAPHICS
-                </button>
-
-
-                <button id="controls-settings">
-                    CONTROLS
-                </button>
-
-
-                <button id="back-button">
-                    BACK
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- ========================= -->
-    <!-- GAME JAVASCRIPT -->
-    <!-- ========================= -->
-
-    <script type="module" src="game.js"></script>
+    <script type="module" src="./game.js"></script>
 
 </body>
+
 </html>
