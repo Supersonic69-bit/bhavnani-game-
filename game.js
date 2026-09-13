@@ -1,15 +1,19 @@
-/* =========================================
-   BHAVNANI GAMES
-   GAME CONTROLLER
-   ========================================= */
+import * as THREE from "three";
 
+// ==========================================
+// BHAVNANI GAMES
+// 3D GAME ENGINE
+// ==========================================
+
+// ---------- SCREENS ----------
 const introScreen = document.getElementById("intro-screen");
 const titleScreen = document.getElementById("title-screen");
 const mainMenu = document.getElementById("main-menu");
 const storyScreen = document.getElementById("story-screen");
-const settingsScreen = document.getElementById("settings-screen");
 const gameWorld = document.getElementById("game-world");
+const settingsScreen = document.getElementById("settings-screen");
 
+// ---------- BUTTONS ----------
 const startButton = document.getElementById("start-button");
 const newGameButton = document.getElementById("new-game-button");
 const continueButton = document.getElementById("continue-button");
@@ -17,538 +21,86 @@ const settingsButton = document.getElementById("settings-button");
 const storyContinueButton = document.getElementById("story-continue-button");
 const backButton = document.getElementById("back-button");
 
-const storyTitle = document.getElementById("story-title");
-const storyText = document.getElementById("story-text");
+const audioSettings = document.getElementById("audio-settings");
+const graphicsSettings = document.getElementById("graphics-settings");
+const controlsSettings = document.getElementById("controls-settings");
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+// ---------- GAME DATA ----------
+const healthElement = document.getElementById("health");
+const objectiveElement = document.getElementById("objective");
+const gameTimeElement = document.getElementById("game-time");
 
 let gameState = "intro";
-let gameTime = 0;
-let gameClock = null;
-
-const player = {
-    x: 0,
-    y: 0,
-    size: 35,
-    speed: 4,
-    health: 100
-};
-
-const keys = {
-    up: false,
-    down: false,
-    left: false,
-    right: false
-};
 
 
-/* =========================================
-   SCREEN SYSTEM
-   ========================================= */
+// ==========================================
+// SCREEN SYSTEM
+// ==========================================
 
 function hideAllScreens() {
-
     introScreen.classList.add("hidden");
     titleScreen.classList.add("hidden");
     mainMenu.classList.add("hidden");
     storyScreen.classList.add("hidden");
-    settingsScreen.classList.add("hidden");
     gameWorld.classList.add("hidden");
-
+    settingsScreen.classList.add("hidden");
 }
 
 
 function showScreen(screen) {
-
     hideAllScreens();
     screen.classList.remove("hidden");
-
 }
 
 
-/* =========================================
-   INTRO
-   ========================================= */
+// ==========================================
+// INTRO
+// ==========================================
 
-function startIntro() {
+setTimeout(() => {
 
-    gameState = "intro";
-
-    showScreen(introScreen);
-
-    setTimeout(() => {
-
-        showTitleScreen();
-
-    }, 3500);
-
-}
-
-
-/* =========================================
-   TITLE
-   ========================================= */
-
-function showTitleScreen() {
-
-    gameState = "title";
-
-    showScreen(titleScreen);
-
-}
-
-
-/* =========================================
-   MAIN MENU
-   ========================================= */
-
-function showMainMenu() {
-
-    gameState = "menu";
-
-    showScreen(mainMenu);
-
-}
-
-
-/* =========================================
-   STORY
-   ========================================= */
-
-function showStory() {
-
-    gameState = "story";
-
-    storyTitle.textContent = "THE BEGINNING";
-
-    storyText.textContent =
-        "Something has changed. " +
-        "The world you are about to enter is full of unknown places, " +
-        "dangerous situations and secrets waiting to be discovered. " +
-        "Your journey begins now.";
-
-    showScreen(storyScreen);
-
-}
-
-
-/* =========================================
-   START GAME
-   ========================================= */
-
-function startGame() {
-
-    gameState = "playing";
-
-    showScreen(gameWorld);
-
-    setupGame();
-
-    startGameClock();
-
-    requestAnimationFrame(gameLoop);
-
-}
-
-
-/* =========================================
-   GAME SETUP
-   ========================================= */
-
-function setupGame() {
-
-    resizeCanvas();
-
-    player.x = canvas.width / 2;
-    player.y = canvas.height / 2;
-    player.health = 100;
-
-    updateHealth();
-
-}
-
-
-/* =========================================
-   CANVAS SIZE
-   ========================================= */
-
-function resizeCanvas() {
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-}
-
-
-/* =========================================
-   GAME LOOP
-   ========================================= */
-
-function gameLoop() {
-
-    if (gameState !== "playing") {
-        return;
+    if (gameState === "intro") {
+        gameState = "title";
+        showScreen(titleScreen);
     }
 
-    updatePlayer();
-    drawGame();
+}, 3500);
 
-    requestAnimationFrame(gameLoop);
 
-}
-
-
-/* =========================================
-   PLAYER MOVEMENT
-   ========================================= */
-
-function updatePlayer() {
-
-    if (keys.up) {
-        player.y -= player.speed;
-    }
-
-    if (keys.down) {
-        player.y += player.speed;
-    }
-
-    if (keys.left) {
-        player.x -= player.speed;
-    }
-
-    if (keys.right) {
-        player.x += player.speed;
-    }
-
-
-    /* Keep player inside screen */
-
-    if (player.x < player.size / 2) {
-        player.x = player.size / 2;
-    }
-
-    if (player.y < player.size / 2) {
-        player.y = player.size / 2;
-    }
-
-    if (player.x > canvas.width - player.size / 2) {
-        player.x = canvas.width - player.size / 2;
-    }
-
-    if (player.y > canvas.height - player.size / 2) {
-        player.y = canvas.height - player.size / 2;
-    }
-
-}
-
-
-/* =========================================
-   DRAW GAME
-   ========================================= */
-
-function drawGame() {
-
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-
-    /* WORLD */
-
-    ctx.fillStyle = "#111";
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-
-    /* GROUND GRID */
-
-    ctx.strokeStyle = "rgba(255,255,255,0.06)";
-    ctx.lineWidth = 1;
-
-    const gridSize = 60;
-
-    for (
-        let x = 0;
-        x < canvas.width;
-        x += gridSize
-    ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-
-        ctx.stroke();
-
-    }
-
-
-    for (
-        let y = 0;
-        y < canvas.height;
-        y += gridSize
-    ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-
-        ctx.stroke();
-
-    }
-
-
-    /* PLAYER */
-
-    drawPlayer();
-
-
-    /* OBJECTIVE */
-
-    const objective =
-        document.getElementById("objective");
-
-    if (objective) {
-
-        objective.textContent =
-            "Objective: Explore the area";
-
-    }
-
-}
-
-
-/* =========================================
-   PLAYER
-   ========================================= */
-
-function drawPlayer() {
-
-    ctx.save();
-
-    ctx.translate(
-        player.x,
-        player.y
-    );
-
-
-    /* Shadow */
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        0,
-        player.size / 2,
-        player.size * 0.55,
-        player.size * 0.18,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle = "rgba(0,0,0,0.5)";
-    ctx.fill();
-
-
-    /* Body */
-
-    ctx.fillStyle = "#ffffff";
-
-    ctx.fillRect(
-        -player.size / 2,
-        -player.size / 2,
-        player.size,
-        player.size
-    );
-
-
-    /* Head */
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        -player.size * 0.65,
-        player.size * 0.3,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle = "#dddddd";
-    ctx.fill();
-
-
-    /* Direction */
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        0,
-        -player.size
-    );
-
-    ctx.lineTo(
-        6,
-        -player.size + 10
-    );
-
-    ctx.lineTo(
-        -6,
-        -player.size + 10
-    );
-
-    ctx.closePath();
-
-    ctx.fillStyle = "#ffffff";
-    ctx.fill();
-
-
-    ctx.restore();
-
-}
-
-
-/* =========================================
-   HEALTH
-   ========================================= */
-
-function updateHealth() {
-
-    const healthElement =
-        document.getElementById("health");
-
-    if (healthElement) {
-
-        healthElement.textContent =
-            "❤️ Health: " + player.health;
-
-    }
-
-}
-
-
-/* =========================================
-   GAME CLOCK
-   ========================================= */
-
-function startGameClock() {
-
-    if (gameClock) {
-        clearInterval(gameClock);
-    }
-
-    gameTime = 0;
-
-    gameClock = setInterval(() => {
-
-        if (gameState !== "playing") {
-            return;
-        }
-
-        gameTime++;
-
-        const minutes =
-            Math.floor(gameTime / 60);
-
-        const seconds =
-            gameTime % 60;
-
-        const formattedTime =
-            String(minutes).padStart(2, "0") +
-            ":" +
-            String(seconds).padStart(2, "0");
-
-        const timeElement =
-            document.getElementById("game-time");
-
-        if (timeElement) {
-
-            timeElement.textContent =
-                formattedTime;
-
-        }
-
-    }, 1000);
-
-}
-
-
-/* =========================================
-   KEYBOARD CONTROLS
-   ========================================= */
-
-document.addEventListener("keydown", (event) => {
-
-    if (event.key === "w" || event.key === "ArrowUp") {
-        keys.up = true;
-    }
-
-    if (event.key === "s" || event.key === "ArrowDown") {
-        keys.down = true;
-    }
-
-    if (event.key === "a" || event.key === "ArrowLeft") {
-        keys.left = true;
-    }
-
-    if (event.key === "d" || event.key === "ArrowRight") {
-        keys.right = true;
-    }
-
-});
-
-
-document.addEventListener("keyup", (event) => {
-
-    if (event.key === "w" || event.key === "ArrowUp") {
-        keys.up = false;
-    }
-
-    if (event.key === "s" || event.key === "ArrowDown") {
-        keys.down = false;
-    }
-
-    if (event.key === "a" || event.key === "ArrowLeft") {
-        keys.left = false;
-    }
-
-    if (event.key === "d" || event.key === "ArrowRight") {
-        keys.right = false;
-    }
-
-});
-
-
-/* =========================================
-   BUTTONS
-   ========================================= */
+// ==========================================
+// TITLE
+// ==========================================
 
 startButton.addEventListener("click", () => {
 
-    showMainMenu();
+    gameState = "menu";
+    showScreen(mainMenu);
 
 });
 
 
+// ==========================================
+// MAIN MENU
+// ==========================================
+
 newGameButton.addEventListener("click", () => {
 
-    showStory();
+    gameState = "story";
+
+    document.getElementById("story-title").textContent =
+        "THE BEGINNING";
+
+    document.getElementById("story-text").textContent =
+        "A new world awaits. Your journey begins now.";
+
+    showScreen(storyScreen);
 
 });
 
 
 continueButton.addEventListener("click", () => {
 
-    startGame();
+    start3DGame();
 
 });
 
@@ -556,7 +108,6 @@ continueButton.addEventListener("click", () => {
 settingsButton.addEventListener("click", () => {
 
     gameState = "settings";
-
     showScreen(settingsScreen);
 
 });
@@ -564,43 +115,711 @@ settingsButton.addEventListener("click", () => {
 
 storyContinueButton.addEventListener("click", () => {
 
-    startGame();
+    start3DGame();
 
 });
 
 
 backButton.addEventListener("click", () => {
 
-    showMainMenu();
+    gameState = "menu";
+    showScreen(mainMenu);
 
 });
 
 
-/* =========================================
-   WINDOW RESIZE
-   ========================================= */
+// ==========================================
+// SETTINGS
+// ==========================================
 
-window.addEventListener("resize", () => {
+let audioEnabled = true;
 
-    if (gameState === "playing") {
+audioSettings.addEventListener("click", () => {
 
-        resizeCanvas();
+    audioEnabled = !audioEnabled;
+
+    audioSettings.textContent =
+        audioEnabled ? "AUDIO: ON" : "AUDIO: OFF";
+
+});
+
+
+graphicsSettings.addEventListener("click", () => {
+
+    graphicsSettings.textContent =
+        graphicsSettings.textContent === "GRAPHICS: HIGH"
+            ? "GRAPHICS: LOW"
+            : "GRAPHICS: HIGH";
+
+});
+
+
+controlsSettings.addEventListener("click", () => {
+
+    alert(
+        "CONTROLS\n\n" +
+        "W / Arrow Up = Move Forward\n" +
+        "S / Arrow Down = Move Backward\n" +
+        "A / Arrow Left = Move Left\n" +
+        "D / Arrow Right = Move Right"
+    );
+
+});
+
+
+// ==========================================
+// THREE.JS VARIABLES
+// ==========================================
+
+let scene;
+let camera;
+let renderer;
+
+let player;
+let ground;
+
+let clock;
+
+let gameStarted = false;
+let gameStartTime = 0;
+
+const keys = {};
+
+
+// ==========================================
+// KEYBOARD
+// ==========================================
+
+window.addEventListener("keydown", (event) => {
+
+    keys[event.key.toLowerCase()] = true;
+
+});
+
+
+window.addEventListener("keyup", (event) => {
+
+    keys[event.key.toLowerCase()] = false;
+
+});
+
+
+// ==========================================
+// START 3D GAME
+// ==========================================
+
+function start3DGame() {
+
+    gameState = "playing";
+
+    showScreen(gameWorld);
+
+    if (!gameStarted) {
+
+        init3DWorld();
+
+        gameStarted = true;
 
     }
 
-});
+    gameStartTime = Date.now();
+
+}
 
 
-/* =========================================
-   INITIALIZE
-   ========================================= */
+// ==========================================
+// CREATE 3D WORLD
+// ==========================================
 
-window.addEventListener("load", () => {
+function init3DWorld() {
 
-    console.log(
-        "BHAVNANI GAMES - SYSTEM INITIALIZED"
+    const canvas = document.getElementById("gameCanvas");
+
+
+    // ======================================
+    // SCENE
+    // ======================================
+
+    scene = new THREE.Scene();
+
+    scene.background = new THREE.Color(0x101820);
+
+
+    // ======================================
+    // CAMERA
+    // ======================================
+
+    camera = new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
     );
 
-    startIntro();
+    camera.position.set(
+        0,
+        6,
+        10
+    );
 
-});
+
+    // ======================================
+    // RENDERER
+    // ======================================
+
+    renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true
+    });
+
+    renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, 2)
+    );
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    renderer.shadowMap.enabled = true;
+
+
+    // ======================================
+    // LIGHTING
+    // ======================================
+
+    const ambientLight = new THREE.AmbientLight(
+        0xffffff,
+        1.5
+    );
+
+    scene.add(ambientLight);
+
+
+    const sunLight = new THREE.DirectionalLight(
+        0xffffff,
+        2
+    );
+
+    sunLight.position.set(
+        20,
+        30,
+        10
+    );
+
+    sunLight.castShadow = true;
+
+    scene.add(sunLight);
+
+
+    // ======================================
+    // GROUND
+    // ======================================
+
+    const groundGeometry =
+        new THREE.PlaneGeometry(
+            200,
+            200
+        );
+
+    const groundMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x263238,
+            roughness: 0.9,
+            metalness: 0
+        });
+
+    ground = new THREE.Mesh(
+        groundGeometry,
+        groundMaterial
+    );
+
+    ground.rotation.x = -Math.PI / 2;
+
+    ground.receiveShadow = true;
+
+    scene.add(ground);
+
+
+    // ======================================
+    // GRID
+    // ======================================
+
+    const grid = new THREE.GridHelper(
+        200,
+        100,
+        0x555555,
+        0x333333
+    );
+
+    grid.position.y = 0.02;
+
+    scene.add(grid);
+
+
+    // ======================================
+    // PLAYER
+    // ======================================
+
+    createPlayer();
+
+
+    // ======================================
+    // TEST ENVIRONMENT
+    // ======================================
+
+    createEnvironment();
+
+
+    // ======================================
+    // CLOCK
+    // ======================================
+
+    clock = new THREE.Clock();
+
+
+    // ======================================
+    // RESIZE
+    // ======================================
+
+    window.addEventListener(
+        "resize",
+        resizeGame
+    );
+
+
+    // ======================================
+    // START LOOP
+    // ======================================
+
+    animate();
+
+}
+
+
+// ==========================================
+// CREATE PLAYER
+// ==========================================
+
+function createPlayer() {
+
+    player = new THREE.Group();
+
+
+    // BODY
+
+    const bodyGeometry =
+        new THREE.BoxGeometry(
+            1.2,
+            1.8,
+            0.7
+        );
+
+    const bodyMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x3498db
+        });
+
+    const body = new THREE.Mesh(
+        bodyGeometry,
+        bodyMaterial
+    );
+
+    body.position.y = 1.3;
+
+    body.castShadow = true;
+
+    player.add(body);
+
+
+    // HEAD
+
+    const headGeometry =
+        new THREE.SphereGeometry(
+            0.5,
+            24,
+            24
+        );
+
+    const headMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xf1c27d
+        });
+
+    const head = new THREE.Mesh(
+        headGeometry,
+        headMaterial
+    );
+
+    head.position.y = 2.55;
+
+    head.castShadow = true;
+
+    player.add(head);
+
+
+    // LEFT LEG
+
+    const legGeometry =
+        new THREE.BoxGeometry(
+            0.35,
+            1,
+            0.35
+        );
+
+    const legMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x1f2937
+        });
+
+
+    const leftLeg =
+        new THREE.Mesh(
+            legGeometry,
+            legMaterial
+        );
+
+    leftLeg.position.set(
+        -0.3,
+        0.5,
+        0
+    );
+
+    leftLeg.castShadow = true;
+
+    player.add(leftLeg);
+
+
+    // RIGHT LEG
+
+    const rightLeg =
+        new THREE.Mesh(
+            legGeometry,
+            legMaterial
+        );
+
+    rightLeg.position.set(
+        0.3,
+        0.5,
+        0
+    );
+
+    rightLeg.castShadow = true;
+
+    player.add(rightLeg);
+
+
+    // PLAYER POSITION
+
+    player.position.set(
+        0,
+        0,
+        0
+    );
+
+    scene.add(player);
+
+}
+
+
+// ==========================================
+// ENVIRONMENT
+// ==========================================
+
+function createEnvironment() {
+
+    // Trees / buildings / objects
+    // Temporary environment for testing.
+    // We will design the real map later.
+
+
+    for (let i = 0; i < 20; i++) {
+
+        const buildingGeometry =
+            new THREE.BoxGeometry(
+                3,
+                3 + Math.random() * 5,
+                3
+            );
+
+        const buildingMaterial =
+            new THREE.MeshStandardMaterial({
+                color: 0x455a64
+            });
+
+        const building =
+            new THREE.Mesh(
+                buildingGeometry,
+                buildingMaterial
+            );
+
+
+        const x =
+            (Math.random() - 0.5) * 100;
+
+        const z =
+            (Math.random() - 0.5) * 100;
+
+
+        // Keep buildings away from player
+
+        if (
+            Math.abs(x) < 10 &&
+            Math.abs(z) < 10
+        ) {
+            continue;
+        }
+
+
+        building.position.set(
+            x,
+            buildingGeometry.parameters.height / 2,
+            z
+        );
+
+
+        building.castShadow = true;
+        building.receiveShadow = true;
+
+        scene.add(building);
+
+    }
+
+}
+
+
+// ==========================================
+// PLAYER MOVEMENT
+// ==========================================
+
+function updatePlayer(delta) {
+
+    if (!player) return;
+
+
+    const speed = 7;
+
+
+    let moveX = 0;
+    let moveZ = 0;
+
+
+    // FORWARD
+
+    if (
+        keys["w"] ||
+        keys["arrowup"]
+    ) {
+
+        moveZ -= 1;
+
+    }
+
+
+    // BACKWARD
+
+    if (
+        keys["s"] ||
+        keys["arrowdown"]
+    ) {
+
+        moveZ += 1;
+
+    }
+
+
+    // LEFT
+
+    if (
+        keys["a"] ||
+        keys["arrowleft"]
+    ) {
+
+        moveX -= 1;
+
+    }
+
+
+    // RIGHT
+
+    if (
+        keys["d"] ||
+        keys["arrowright"]
+    ) {
+
+        moveX += 1;
+
+    }
+
+
+    // Normalize diagonal movement
+
+    if (
+        moveX !== 0 ||
+        moveZ !== 0
+    ) {
+
+        const length =
+            Math.sqrt(
+                moveX * moveX +
+                moveZ * moveZ
+            );
+
+        moveX /= length;
+        moveZ /= length;
+
+
+        player.position.x +=
+            moveX * speed * delta;
+
+        player.position.z +=
+            moveZ * speed * delta;
+
+
+        // Rotate player toward movement
+
+        player.rotation.y =
+            Math.atan2(
+                moveX,
+                moveZ
+            );
+
+    }
+
+}
+
+
+// ==========================================
+// CAMERA
+// ==========================================
+
+function updateCamera() {
+
+    if (!player || !camera) return;
+
+
+    const cameraOffset =
+        new THREE.Vector3(
+            0,
+            6,
+            10
+        );
+
+
+    const desiredPosition =
+        player.position.clone()
+            .add(cameraOffset);
+
+
+    camera.position.lerp(
+        desiredPosition,
+        0.08
+    );
+
+
+    const target =
+        player.position.clone();
+
+    target.y += 1.5;
+
+
+    camera.lookAt(target);
+
+}
+
+
+// ==========================================
+// GAME TIMER
+// ==========================================
+
+function updateTimer() {
+
+    if (!gameStarted) return;
+
+
+    const elapsed =
+        Math.floor(
+            (Date.now() - gameStartTime) / 1000
+        );
+
+
+    const minutes =
+        Math.floor(elapsed / 60);
+
+    const seconds =
+        elapsed % 60;
+
+
+    const formattedMinutes =
+        String(minutes).padStart(2, "0");
+
+    const formattedSeconds =
+        String(seconds).padStart(2, "0");
+
+
+    gameTimeElement.textContent =
+        `${formattedMinutes}:${formattedSeconds}`;
+
+}
+
+
+// ==========================================
+// ANIMATION
+// ==========================================
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+
+    if (!renderer || !scene || !camera) {
+        return;
+    }
+
+
+    const delta =
+        clock.getDelta();
+
+
+    if (gameState === "playing") {
+
+        updatePlayer(delta);
+
+        updateCamera();
+
+        updateTimer();
+
+    }
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+// ==========================================
+// RESIZE
+// ==========================================
+
+function resizeGame() {
+
+    if (!camera || !renderer) return;
+
+
+    camera.aspect =
+        window.innerWidth /
+        window.innerHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+}
