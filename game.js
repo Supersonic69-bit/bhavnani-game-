@@ -1,6 +1,6 @@
 /* =========================================
    BHAVNANI GAMES
-   MAIN GAME CONTROLLER
+   GAME CONTROLLER
    ========================================= */
 
 const introScreen = document.getElementById("intro-screen");
@@ -20,27 +20,50 @@ const backButton = document.getElementById("back-button");
 const storyTitle = document.getElementById("story-title");
 const storyText = document.getElementById("story-text");
 
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
 let gameState = "intro";
 let gameTime = 0;
+let gameClock = null;
+
+const player = {
+    x: 0,
+    y: 0,
+    size: 35,
+    speed: 4,
+    health: 100
+};
+
+const keys = {
+    up: false,
+    down: false,
+    left: false,
+    right: false
+};
 
 
 /* =========================================
-   SCREEN CONTROL
+   SCREEN SYSTEM
    ========================================= */
 
 function hideAllScreens() {
+
     introScreen.classList.add("hidden");
     titleScreen.classList.add("hidden");
     mainMenu.classList.add("hidden");
     storyScreen.classList.add("hidden");
     settingsScreen.classList.add("hidden");
     gameWorld.classList.add("hidden");
+
 }
 
 
 function showScreen(screen) {
+
     hideAllScreens();
     screen.classList.remove("hidden");
+
 }
 
 
@@ -59,11 +82,12 @@ function startIntro() {
         showTitleScreen();
 
     }, 3500);
+
 }
 
 
 /* =========================================
-   TITLE SCREEN
+   TITLE
    ========================================= */
 
 function showTitleScreen() {
@@ -71,6 +95,7 @@ function showTitleScreen() {
     gameState = "title";
 
     showScreen(titleScreen);
+
 }
 
 
@@ -83,6 +108,7 @@ function showMainMenu() {
     gameState = "menu";
 
     showScreen(mainMenu);
+
 }
 
 
@@ -97,16 +123,18 @@ function showStory() {
     storyTitle.textContent = "THE BEGINNING";
 
     storyText.textContent =
-        "A new world is waiting. " +
-        "Something has changed, and your journey is about to begin. " +
-        "Explore the world, discover its secrets, and find out what happened.";
+        "Something has changed. " +
+        "The world you are about to enter is full of unknown places, " +
+        "dangerous situations and secrets waiting to be discovered. " +
+        "Your journey begins now.";
 
     showScreen(storyScreen);
+
 }
 
 
 /* =========================================
-   GAME WORLD
+   START GAME
    ========================================= */
 
 function startGame() {
@@ -115,9 +143,296 @@ function startGame() {
 
     showScreen(gameWorld);
 
-    console.log("Bhavnani Games: Game Started");
+    setupGame();
 
     startGameClock();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+/* =========================================
+   GAME SETUP
+   ========================================= */
+
+function setupGame() {
+
+    resizeCanvas();
+
+    player.x = canvas.width / 2;
+    player.y = canvas.height / 2;
+    player.health = 100;
+
+    updateHealth();
+
+}
+
+
+/* =========================================
+   CANVAS SIZE
+   ========================================= */
+
+function resizeCanvas() {
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+}
+
+
+/* =========================================
+   GAME LOOP
+   ========================================= */
+
+function gameLoop() {
+
+    if (gameState !== "playing") {
+        return;
+    }
+
+    updatePlayer();
+    drawGame();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+/* =========================================
+   PLAYER MOVEMENT
+   ========================================= */
+
+function updatePlayer() {
+
+    if (keys.up) {
+        player.y -= player.speed;
+    }
+
+    if (keys.down) {
+        player.y += player.speed;
+    }
+
+    if (keys.left) {
+        player.x -= player.speed;
+    }
+
+    if (keys.right) {
+        player.x += player.speed;
+    }
+
+
+    /* Keep player inside screen */
+
+    if (player.x < player.size / 2) {
+        player.x = player.size / 2;
+    }
+
+    if (player.y < player.size / 2) {
+        player.y = player.size / 2;
+    }
+
+    if (player.x > canvas.width - player.size / 2) {
+        player.x = canvas.width - player.size / 2;
+    }
+
+    if (player.y > canvas.height - player.size / 2) {
+        player.y = canvas.height - player.size / 2;
+    }
+
+}
+
+
+/* =========================================
+   DRAW GAME
+   ========================================= */
+
+function drawGame() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* WORLD */
+
+    ctx.fillStyle = "#111";
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* GROUND GRID */
+
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.lineWidth = 1;
+
+    const gridSize = 60;
+
+    for (
+        let x = 0;
+        x < canvas.width;
+        x += gridSize
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+
+        ctx.stroke();
+
+    }
+
+
+    for (
+        let y = 0;
+        y < canvas.height;
+        y += gridSize
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+
+        ctx.stroke();
+
+    }
+
+
+    /* PLAYER */
+
+    drawPlayer();
+
+
+    /* OBJECTIVE */
+
+    const objective =
+        document.getElementById("objective");
+
+    if (objective) {
+
+        objective.textContent =
+            "Objective: Explore the area";
+
+    }
+
+}
+
+
+/* =========================================
+   PLAYER
+   ========================================= */
+
+function drawPlayer() {
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    /* Shadow */
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        player.size / 2,
+        player.size * 0.55,
+        player.size * 0.18,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+    ctx.fill();
+
+
+    /* Body */
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillRect(
+        -player.size / 2,
+        -player.size / 2,
+        player.size,
+        player.size
+    );
+
+
+    /* Head */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -player.size * 0.65,
+        player.size * 0.3,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "#dddddd";
+    ctx.fill();
+
+
+    /* Direction */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        -player.size
+    );
+
+    ctx.lineTo(
+        6,
+        -player.size + 10
+    );
+
+    ctx.lineTo(
+        -6,
+        -player.size + 10
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================================
+   HEALTH
+   ========================================= */
+
+function updateHealth() {
+
+    const healthElement =
+        document.getElementById("health");
+
+    if (healthElement) {
+
+        healthElement.textContent =
+            "❤️ Health: " + player.health;
+
+    }
+
 }
 
 
@@ -127,9 +442,13 @@ function startGame() {
 
 function startGameClock() {
 
+    if (gameClock) {
+        clearInterval(gameClock);
+    }
+
     gameTime = 0;
 
-    setInterval(() => {
+    gameClock = setInterval(() => {
 
         if (gameState !== "playing") {
             return;
@@ -137,23 +456,80 @@ function startGameClock() {
 
         gameTime++;
 
-        const minutes = Math.floor(gameTime / 60);
-        const seconds = gameTime % 60;
+        const minutes =
+            Math.floor(gameTime / 60);
+
+        const seconds =
+            gameTime % 60;
 
         const formattedTime =
             String(minutes).padStart(2, "0") +
             ":" +
             String(seconds).padStart(2, "0");
 
-        document.getElementById("game-time").textContent =
-            formattedTime;
+        const timeElement =
+            document.getElementById("game-time");
+
+        if (timeElement) {
+
+            timeElement.textContent =
+                formattedTime;
+
+        }
 
     }, 1000);
+
 }
 
 
 /* =========================================
-   BUTTON EVENTS
+   KEYBOARD CONTROLS
+   ========================================= */
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "w" || event.key === "ArrowUp") {
+        keys.up = true;
+    }
+
+    if (event.key === "s" || event.key === "ArrowDown") {
+        keys.down = true;
+    }
+
+    if (event.key === "a" || event.key === "ArrowLeft") {
+        keys.left = true;
+    }
+
+    if (event.key === "d" || event.key === "ArrowRight") {
+        keys.right = true;
+    }
+
+});
+
+
+document.addEventListener("keyup", (event) => {
+
+    if (event.key === "w" || event.key === "ArrowUp") {
+        keys.up = false;
+    }
+
+    if (event.key === "s" || event.key === "ArrowDown") {
+        keys.down = false;
+    }
+
+    if (event.key === "a" || event.key === "ArrowLeft") {
+        keys.left = false;
+    }
+
+    if (event.key === "d" || event.key === "ArrowRight") {
+        keys.right = false;
+    }
+
+});
+
+
+/* =========================================
+   BUTTONS
    ========================================= */
 
 startButton.addEventListener("click", () => {
@@ -201,18 +577,14 @@ backButton.addEventListener("click", () => {
 
 
 /* =========================================
-   KEYBOARD CONTROLS
+   WINDOW RESIZE
    ========================================= */
 
-document.addEventListener("keydown", (event) => {
+window.addEventListener("resize", () => {
 
-    if (event.key === "Escape") {
+    if (gameState === "playing") {
 
-        if (gameState === "settings") {
-
-            showMainMenu();
-
-        }
+        resizeCanvas();
 
     }
 
@@ -220,15 +592,14 @@ document.addEventListener("keydown", (event) => {
 
 
 /* =========================================
-   GAME INITIALIZATION
+   INITIALIZE
    ========================================= */
 
 window.addEventListener("load", () => {
 
-    console.log("=================================");
-    console.log("BHAVNANI GAMES");
-    console.log("Game System Initialized");
-    console.log("=================================");
+    console.log(
+        "BHAVNANI GAMES - SYSTEM INITIALIZED"
+    );
 
     startIntro();
 
