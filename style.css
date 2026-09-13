@@ -1,0 +1,353 @@
+/* ============================= */
+/* BHAVNANI GAMES - MAIN STYLE */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #000;
+    color: #fff;
+}
+
+/* ============================= */
+/* GAME CONTAINER */
+/* ============================= */
+
+#game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #000;
+}
+
+/* ============================= */
+/* COMMON SCREEN */
+/* ============================= */
+
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(circle at center, #222 0%, #080808 45%, #000 100%);
+
+    transition: opacity 1s ease;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================= */
+/* INTRO SCREEN */
+/* ============================= */
+
+#intro-screen {
+    background: #000;
+}
+
+.intro-content {
+    animation: introFade 3s ease forwards;
+}
+
+#studio-logo {
+    font-size: clamp(35px, 6vw, 90px);
+    font-weight: 900;
+    letter-spacing: 12px;
+}
+
+#intro-text {
+    margin-top: 20px;
+    font-size: 14px;
+    letter-spacing: 8px;
+    opacity: 0.7;
+}
+
+/* ============================= */
+/* TITLE SCREEN */
+/* ============================= */
+
+#title-screen {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0.85)
+        ),
+        radial-gradient(
+            circle at center,
+            #303030,
+            #050505 70%
+        );
+}
+
+.title-content {
+    animation: titleAppear 1.5s ease forwards;
+}
+
+#game-title {
+    font-size: clamp(45px, 8vw, 120px);
+    font-weight: 900;
+    letter-spacing: 8px;
+    text-shadow: 0 5px 25px rgba(0, 0, 0, 0.9);
+}
+
+#game-subtitle {
+    margin-top: 18px;
+    font-size: 16px;
+    letter-spacing: 6px;
+    opacity: 0.7;
+}
+
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+button {
+    display: block;
+
+    width: 260px;
+    margin: 18px auto;
+    padding: 15px 25px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 3px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* ============================= */
+/* START BUTTON */
+/* ============================= */
+
+#start-button {
+    margin-top: 50px;
+    font-size: 16px;
+    padding: 17px 30px;
+}
+
+/* ============================= */
+/* MAIN MENU */
+/* ============================= */
+
+#main-menu {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.9)
+        ),
+        radial-gradient(
+            circle at center,
+            #252525,
+            #000
+        );
+}
+
+.menu-content h2 {
+    margin-bottom: 40px;
+    font-size: 32px;
+    letter-spacing: 8px;
+}
+
+/* ============================= */
+/* STORY SCREEN */
+/* ============================= */
+
+#story-screen {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.65),
+            rgba(0, 0, 0, 0.95)
+        ),
+        radial-gradient(
+            circle at center,
+            #1c1c1c,
+            #000
+        );
+}
+
+.story-content {
+    width: min(800px, 85%);
+}
+
+#story-title {
+    font-size: 40px;
+    letter-spacing: 7px;
+    margin-bottom: 35px;
+}
+
+#story-text {
+    font-size: 19px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+/* ============================= */
+/* GAME WORLD */
+/* ============================= */
+
+#game-world {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #111;
+}
+
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ============================= */
+/* HUD */
+/* ============================= */
+
+#hud {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    right: 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    pointer-events: none;
+}
+
+#health,
+#objective,
+#game-time {
+    padding: 10px 15px;
+
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* ============================= */
+/* SETTINGS */
+/* ============================= */
+
+.settings-content h2 {
+    margin-bottom: 40px;
+    font-size: 32px;
+    letter-spacing: 8px;
+}
+
+/* ============================= */
+/* ANIMATIONS */
+/* ============================= */
+
+@keyframes introFade {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes titleAppear {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================= */
+/* MOBILE / ANDROID */
+/* ============================= */
+
+@media (max-width: 600px) {
+
+    #studio-logo {
+        letter-spacing: 6px;
+    }
+
+    #game-title {
+        letter-spacing: 4px;
+    }
+
+    #game-subtitle {
+        font-size: 11px;
+        letter-spacing: 3px;
+    }
+
+    button {
+        width: 220px;
+    }
+
+    #hud {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+    }
+
+    #health,
+    #objective,
+    #game-time {
+        font-size: 11px;
+        padding: 7px 9px;
+    }
+}
