@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bhavnani Games</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- GAME CONTAINER -->
+    <!-- ============================= -->
+
+    <main id="game">
+
+        <!-- ============================= -->
+        <!-- INTRO / LOADING SCREEN -->
+        <!-- ============================= -->
+
+        <section id="intro-screen" class="screen">
+
+            <div class="intro-content">
+
+                <div id="studio-logo">
+                    BHAVNANI GAMES
+                </div>
+
+                <p id="intro-text">
+                    PRESENTS
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- TITLE SCREEN -->
+        <!-- ============================= -->
+
+        <section id="title-screen" class="screen hidden">
+
+            <div class="title-content">
+
+                <h1 id="game-title">
+                    BHAVNANI GAMES
+                </h1>
+
+                <p id="game-subtitle">
+                    A NEW ADVENTURE BEGINS
+                </p>
+
+                <button id="start-button">
+                    START GAME
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- MAIN MENU -->
+        <!-- ============================= -->
+
+        <section id="main-menu" class="screen hidden">
+
+            <div class="menu-content">
+
+                <h2>MAIN MENU</h2>
+
+                <button id="new-game-button">
+                    NEW GAME
+                </button>
+
+                <button id="continue-button">
+                    CONTINUE
+                </button>
+
+                <button id="settings-button">
+                    SETTINGS
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- STORY INTRO -->
+        <!-- ============================= -->
+
+        <section id="story-screen" class="screen hidden">
+
+            <div class="story-content">
+
+                <h2 id="story-title">
+                    THE BEGINNING
+                </h2>
+
+                <p id="story-text">
+                    The story begins here...
+                </p>
+
+                <button id="story-continue-button">
+                    CONTINUE
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- GAME WORLD -->
+        <!-- ============================= -->
+
+        <section id="game-world" class="hidden">
+
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- GAME HUD -->
+
+            <div id="hud">
+
+                <div id="health">
+                    ❤️ Health: 100
+                </div>
+
+                <div id="objective">
+                    Objective: Explore the area
+                </div>
+
+                <div id="game-time">
+                    00:00
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- SETTINGS -->
+        <!-- ============================= -->
+
+        <section id="settings-screen" class="screen hidden">
+
+            <div class="settings-content">
+
+                <h2>SETTINGS</h2>
+
+                <button id="audio-settings">
+                    AUDIO
+                </button>
+
+                <button id="graphics-settings">
+                    GRAPHICS
+                </button>
+
+                <button id="controls-settings">
+                    CONTROLS
+                </button>
+
+                <button id="back-button">
+                    BACK
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ============================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================= -->
+
+    <script src="game.js"></script>
+
+</body>
+</html>
