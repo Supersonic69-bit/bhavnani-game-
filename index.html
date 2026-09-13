@@ -7,19 +7,25 @@
     <title>Bhavnani Games</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- THREE.JS -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 
 <body>
 
-    <!-- ============================= -->
-    <!-- GAME CONTAINER -->
-    <!-- ============================= -->
-
     <main id="game">
 
-        <!-- ============================= -->
-        <!-- INTRO / LOADING SCREEN -->
-        <!-- ============================= -->
+        <!-- ========================= -->
+        <!-- INTRO SCREEN -->
+        <!-- ========================= -->
 
         <section id="intro-screen" class="screen">
 
@@ -38,9 +44,9 @@
         </section>
 
 
-        <!-- ============================= -->
+        <!-- ========================= -->
         <!-- TITLE SCREEN -->
-        <!-- ============================= -->
+        <!-- ========================= -->
 
         <section id="title-screen" class="screen hidden">
 
@@ -63,15 +69,17 @@
         </section>
 
 
-        <!-- ============================= -->
+        <!-- ========================= -->
         <!-- MAIN MENU -->
-        <!-- ============================= -->
+        <!-- ========================= -->
 
         <section id="main-menu" class="screen hidden">
 
             <div class="menu-content">
 
-                <h2>MAIN MENU</h2>
+                <h2>
+                    MAIN MENU
+                </h2>
 
                 <button id="new-game-button">
                     NEW GAME
@@ -90,9 +98,9 @@
         </section>
 
 
-        <!-- ============================= -->
-        <!-- STORY INTRO -->
-        <!-- ============================= -->
+        <!-- ========================= -->
+        <!-- STORY SCREEN -->
+        <!-- ========================= -->
 
         <section id="story-screen" class="screen hidden">
 
@@ -115,15 +123,18 @@
         </section>
 
 
-        <!-- ============================= -->
-        <!-- GAME WORLD -->
-        <!-- ============================= -->
+        <!-- ========================= -->
+        <!-- 3D GAME WORLD -->
+        <!-- ========================= -->
 
         <section id="game-world" class="hidden">
 
             <canvas id="gameCanvas"></canvas>
 
+
+            <!-- ========================= -->
             <!-- GAME HUD -->
+            <!-- ========================= -->
 
             <div id="hud">
 
@@ -141,30 +152,57 @@
 
             </div>
 
+
+            <!-- ========================= -->
+            <!-- CONTROLS -->
+            <!-- ========================= -->
+
+            <div id="controls">
+
+                <div class="control-row">
+                    <span>W</span>
+                </div>
+
+                <div class="control-row">
+
+                    <span>A</span>
+                    <span>S</span>
+                    <span>D</span>
+
+                </div>
+
+            </div>
+
         </section>
 
 
-        <!-- ============================= -->
-        <!-- SETTINGS -->
-        <!-- ============================= -->
+        <!-- ========================= -->
+        <!-- SETTINGS SCREEN -->
+        <!-- ========================= -->
 
         <section id="settings-screen" class="screen hidden">
 
             <div class="settings-content">
 
-                <h2>SETTINGS</h2>
+                <h2>
+                    SETTINGS
+                </h2>
+
 
                 <button id="audio-settings">
                     AUDIO
                 </button>
 
+
                 <button id="graphics-settings">
                     GRAPHICS
                 </button>
 
+
                 <button id="controls-settings">
                     CONTROLS
                 </button>
+
 
                 <button id="back-button">
                     BACK
@@ -177,11 +215,11 @@
     </main>
 
 
-    <!-- ============================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================= -->
+    <!-- ========================= -->
+    <!-- GAME JAVASCRIPT -->
+    <!-- ========================= -->
 
-    <script src="game.js"></script>
+    <script type="module" src="game.js"></script>
 
 </body>
 </html>
